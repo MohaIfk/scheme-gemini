@@ -1,3 +1,4 @@
+;; Export invalid-uri error predicate and constructor for use in other modules
 (define-library (gemini)
   (export gemini-error?
           gemini-error-response
@@ -13,11 +14,15 @@
           gemini-response-read-bytevector-all
           gemini-response-read-string-all
           gemini-response-raise
-          read-cr-lf-terminated-line)
+          read-cr-lf-terminated-line
+          make-invalid-uri-error
+          invalid-uri-error?)
   (import (scheme base))
   (cond-expand
     (chicken
-     (import (chicken condition) (openssl) (uri-generic))))
+     (import (chicken condition) (openssl) (uri-generic))
+     (define-condition-type &invalid-uri &error
+       make-invalid-uri-error invalid-uri-error?)))
   (cond-expand
     (chicken
 

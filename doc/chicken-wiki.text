@@ -27,7 +27,8 @@ the procedure {{handle-response}} with the response object as an
 argument.
 
 {{uri}} must be a {{gemini://}} URI. It can be either a string or a
-URI object from the [[uri-generic]] egg.
+URI object from the [[uri-generic]] egg. If the URI is invalid (wrong scheme or missing host),
+{{gemini-get}} raises an {{invalid-uri-error?}} condition, which can be caught using a guard.
 
 === The (gemini) library
 
@@ -83,17 +84,17 @@ satisfies {{gemini-error?}}, and calling {{gemini-error-response}} on
 it returns {{response}}. If {{response}} is a success response,
 {{gemini-response-raise}} returns {{#f}}.
 
-==== Error object
+
+==== Error objects
 
 <procedure>(gemini-error? object)</procedure>
-
-Return {{#t}} if {{object}} is a Gemini error condition, {{#f}}
-otherwise.
+Return {{#t}} if {{object}} is a Gemini error condition, {{#f}} otherwise.
 
 <procedure>(gemini-error-response gemini-error)</procedure>
+Return the Gemini response object (satisfies {{gemini-response?}}) associated with the error, or {{#f}} if none.
 
-Return the Gemini response object (satisfies {{gemini-response?}})
-associated with the error, of {{#f}} if none.
+<procedure>(invalid-uri-error? object)</procedure>
+Return {{#t}} if {{object}} is an invalid URI error condition, {{#f}} otherwise. Raised by {{gemini-get}} for invalid URIs.
 
 === Example
 

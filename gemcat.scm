@@ -12,7 +12,13 @@
   (unless (= 1 (length (command-args)))
     (error "Usage"))
   (let ((uri (car (command-args))))
-    (guard (err ((gemini-error? err) (display-gemini-error err)))
+    (guard (err
+      ((gemini-error? err) (display-gemini-error err))
+      ((invalid-uri-error? err)
+        (write-string
+          (string-append "Invalid URI: " (condition-message err) "\n")
+          (current-error-port))
+        (exit 1)))
       (gemini-get
        uri
        (lambda (response)
